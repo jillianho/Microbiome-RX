@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MicrobiomeRx | Drug-Microbiome Interaction Analyzer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            950: '#0a0c10',
+                            900: '#0f1218',
+                            800: '#1a1f2e',
+                            700: '#2a3142',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #34d399 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-border {
+            background: linear-gradient(135deg, #34d399, #3b82f6);
+        }
+        .loading-spinner {
+            border: 2px solid #1a1f2e;
+            border-top: 2px solid #34d399;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .drug-tag {
+            animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+    <div id="app" class="p-6 max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <div class="w-12 h-12 rounded-xl gradient-border flex items-center justify-center text-2xl">💊</div>
+                <div>
+                    <h1 class="text-3xl font-bold gradient-text">MicrobiomeRx</h1>
+                    <p class="text-slate-400 text-sm">Drug-Microbiome Interaction Analyzer</p>
+                </div>
+            </div>
+            <p class="text-slate-400 mt-4 max-w-2xl">
+                Discover how your medications affect your gut bacteria — and what that means for your mental and physical health.
+            </p>
+        </header>
+
+        <!-- Drug Input Section -->
+        <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 mb-6">
+            <h2 class="text-lg font-medium mb-4">Enter Your Medications</h2>
+            
+            <!-- Search Input -->
+            <div class="relative mb-4">
+                <input 
+                    type="text" 
+                    id="drugSearch" 
+                    placeholder="Type a medication name (e.g., Omeprazole, Lexapro, Ibuprofen...)"
+                    autocomplete="off"
+                    class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-slate-100 placeholder:text-slate-500"
+                >
+                <!-- Autocomplete dropdown -->
+                <div id="autocomplete" class="absolute z-10 w-full mt-1 bg-slate-800 border border-slate-700 rounded-xl hidden max-h-64 overflow-y-auto">
+                </div>
+            </div>
+
+            <!-- Selected Drugs -->
+            <div id="selectedDrugs" class="flex flex-wrap gap-2 mb-4 min-h-[40px]">
+                <!-- Drug tags will appear here -->
+            </div>
+
+            <!-- Quick Add Examples -->
+            <div class="flex items-center gap-2 flex-wrap mb-4">
+                <span class="text-sm text-slate-500">Quick add:</span>
+                <button onclick="quickAdd('Omeprazole')" class="text-sm px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors">
+                    Omeprazole
+                </button>
+                <button onclick="quickAdd('Sertraline')" class="text-sm px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors">
+                    Sertraline
+                </button>
+                <button onclick="quickAdd('Ibuprofen')" class="text-sm px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors">
+                    Ibuprofen
+                </button>
+                <button onclick="quickAdd('Metformin')" class="text-sm px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors">
+                    Metformin
+                </button>
+                <button onclick="quickAdd('Amoxicillin')" class="text-sm px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-colors">
+                    Amoxicillin
+                </button>
+            </div>
+
+            <!-- Analyze Button -->
+            <button 
+                id="analyzeBtn"
+                onclick="analyzeDrugs()"
+                disabled
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-all"
+            >
+                Analyze Interactions
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden">
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-8 text-center">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-slate-400">Analyzing drug-microbiome interactions...</p>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="hidden space-y-6">
+            
+            <!-- Risk Summary Banner -->
+            <div id="riskBanner" class="rounded-2xl p-6 border">
+                <!-- Filled dynamically -->
+            </div>
+
+            <!-- Tabs -->
+            <div id="tabs" class="flex gap-2 overflow-x-auto pb-2">
+                <button onclick="showTab('bacteria')" data-tab="bacteria" class="tab-btn px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all bg-emerald-600 text-white">
+                    🦠 Bacteria Effects
+                </button>
+                <button onclick="showTab('mental')" data-tab="mental" class="tab-btn px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">
+                    🧠 Mental Health
+                </button>
+                <button onclick="showTab('physical')" data-tab="physical" class="tab-btn px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">
+                    🏥 Physical Health
+                </button>
+                <button onclick="showTab('interactions')" data-tab="interactions" class="tab-btn px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">
+                    ⚠️ Interactions
+                </button>
+                <button onclick="showTab('recommendations')" data-tab="recommendations" class="tab-btn px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all bg-slate-800 text-slate-400 hover:bg-slate-700">
+                    💡 Recommendations
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+                <div id="tab-bacteria" class="tab-content"></div>
+                <div id="tab-mental" class="tab-content hidden"></div>
+                <div id="tab-physical" class="tab-content hidden"></div>
+                <div id="tab-interactions" class="tab-content hidden"></div>
+                <div id="tab-recommendations" class="tab-content hidden"></div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <footer class="mt-12 text-center text-sm text-slate-600">
+            <p class="mb-2">⚕️ <strong>Disclaimer:</strong> This tool is for educational purposes only.</p>
+            <p>Not intended for clinical decision-making. Always consult your healthcare provider.</p>
+        </footer>
+    </div>
+
+    <script>
+        // State
+        let selectedDrugs = [];
+        let analysisData = null;
+        const API_BASE = window.location.origin;
+
+        // DOM elements
+        const drugSearch = document.getElementById('drugSearch');
+        const autocomplete = document.getElementById('autocomplete');
+        const selectedDrugsContainer = document.getElementById('selectedDrugs');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+
+        // Debounce helper
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Search drugs
+        const searchDrugs = debounce(async (query) => {
+            if (query.length < 1) {
+                autocomplete.classList.add('hidden');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/drugs/search?q=${encodeURIComponent(query)}`);
+                const results = await response.json();
+                
+                if (results.length === 0) {
+                    autocomplete.innerHTML = `<div class="p-3 text-slate-500">No drugs found</div>`;
+                } else {
+                    autocomplete.innerHTML = results.map(drug => `
+                        <div class="p-3 hover:bg-slate-700 cursor-pointer transition-colors" onclick="selectDrug('${drug.name}')">
+                            <div class="font-medium text-slate-200">${drug.name}</div>
+                            <div class="text-sm text-slate-500">${drug.brand_names.join(', ')} • ${drug.drug_class}</div>
+                        </div>
+                    `).join('');
+                }
+                autocomplete.classList.remove('hidden');
+            } catch (err) {
+                console.error('Search error:', err);
+            }
+        }, 200);
+
+        // Event listeners
+        drugSearch.addEventListener('input', (e) => searchDrugs(e.target.value));
+        drugSearch.addEventListener('focus', () => {
+            if (drugSearch.value) searchDrugs(drugSearch.value);
+        });
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#drugSearch') && !e.target.closest('#autocomplete')) {
+                autocomplete.classList.add('hidden');
+            }
+        });
+
+        // Select a drug
+        function selectDrug(name) {
+            if (!selectedDrugs.includes(name)) {
+                selectedDrugs.push(name);
+                renderSelectedDrugs();
+            }
+            drugSearch.value = '';
+            autocomplete.classList.add('hidden');
+        }
+
+        // Quick add
+        function quickAdd(name) {
+            selectDrug(name);
+        }
+
+        // Remove a drug
+        function removeDrug(name) {
+            selectedDrugs = selectedDrugs.filter(d => d !== name);
+            renderSelectedDrugs();
+        }
+
+        // Render selected drugs
+        function renderSelectedDrugs() {
+            if (selectedDrugs.length === 0) {
+                selectedDrugsContainer.innerHTML = `<span class="text-slate-500 text-sm">No medications added yet</span>`;
+                analyzeBtn.disabled = true;
+            } else {
+                selectedDrugsContainer.innerHTML = selectedDrugs.map(drug => `
+                    <span class="drug-tag inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                        ${drug}
+                        <button onclick="removeDrug('${drug}')" class="hover:text-emerald-200">×</button>
+                    </span>
+                `).join('');
+                analyzeBtn.disabled = false;
+            }
+        }
+
+        // Analyze drugs
+        async function analyzeDrugs() {
+            if (selectedDrugs.length === 0) return;
+
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ drugs: selectedDrugs })
+                });
+
+                if (!response.ok) throw new Error('Analysis failed');
+
+                analysisData = await response.json();
+                renderResults(analysisData);
+
+            } catch (err) {
+                alert('Error: ' + err.message);
+            } finally {
+                document.getElementById('loadingState').classList.add('hidden');
+            }
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.dataset.tab === tabName) {
+                    btn.classList.remove('bg-slate-800', 'text-slate-400');
+                    btn.classList.add('bg-emerald-600', 'text-white');
+                } else {
+                    btn.classList.remove('bg-emerald-600', 'text-white');
+                    btn.classList.add('bg-slate-800', 'text-slate-400');
+                }
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        }
+
+        // Render results
+        function renderResults(data) {
+            // Risk banner
+            const riskColors = {
+                high: 'bg-red-950/50 border-red-800 text-red-400',
+                moderate: 'bg-amber-950/50 border-amber-800 text-amber-400',
+                mild: 'bg-yellow-950/50 border-yellow-800 text-yellow-400',
+                low: 'bg-emerald-950/50 border-emerald-800 text-emerald-400'
+            };
+            const riskEmoji = { high: '🔴', moderate: '🟠', mild: '🟡', low: '🟢' };
+            const risk = data.mental_health_impact.overall_risk;
+            
+            document.getElementById('riskBanner').className = `rounded-2xl p-6 border ${riskColors[risk]}`;
+            document.getElementById('riskBanner').innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">${riskEmoji[risk]}</span>
+                    <div>
+                        <h3 class="text-lg font-semibold">Overall Microbiome Impact: ${risk.toUpperCase()}</h3>
+                        <p class="text-sm opacity-80">Based on ${data.drugs_analyzed.length} medication(s): ${data.drugs_analyzed.join(', ')}</p>
+                    </div>
+                </div>
+            `;
+
+            // Bacteria tab
+            const decreasedHTML = data.bacteria_decreased.length > 0 
+                ? data.bacteria_decreased.map(b => `
+                    <div class="flex items-center justify-between p-3 bg-red-950/30 rounded-lg border border-red-900/50">
+                        <div>
+                            <span class="font-medium text-red-400">↓ ${b.bacteria}</span>
+                            <span class="text-sm text-slate-500 ml-2">(${b.max_magnitude})</span>
+                        </div>
+                        <span class="text-sm text-slate-500">${b.drugs.join(', ')}</span>
+                    </div>
+                `).join('')
+                : '<p class="text-slate-500">No significant decreases</p>';
+
+            const increasedHTML = data.bacteria_increased.length > 0
+                ? data.bacteria_increased.map(b => `
+                    <div class="flex items-center justify-between p-3 bg-amber-950/30 rounded-lg border border-amber-900/50">
+                        <div>
+                            <span class="font-medium text-amber-400">↑ ${b.bacteria}</span>
+                            <span class="text-sm text-slate-500 ml-2">(${b.max_magnitude})</span>
+                        </div>
+                        <span class="text-sm text-slate-500">${b.drugs.join(', ')}</span>
+                    </div>
+                `).join('')
+                : '<p class="text-slate-500">No significant increases</p>';
+
+            document.getElementById('tab-bacteria').innerHTML = `
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-sm font-medium text-red-400 uppercase tracking-wide mb-3">Bacteria Decreased</h3>
+                        <div class="space-y-2">${decreasedHTML}</div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-amber-400 uppercase tracking-wide mb-3">Bacteria Increased</h3>
+                        <div class="space-y-2">${increasedHTML}</div>
+                    </div>
+                </div>
+            `;
+
+            // Mental health tab
+            const mhConcerns = data.mental_health_impact.concerns;
+            document.getElementById('tab-mental').innerHTML = `
+                <div class="space-y-6">
+                    <div class="p-4 rounded-xl bg-slate-800/50">
+                        <h3 class="font-medium mb-2">Mental Health Risk: ${data.mental_health_impact.overall_risk.toUpperCase()}</h3>
+                        <p class="text-sm text-slate-400">Based on known gut-brain axis effects of your medications.</p>
+                    </div>
+                    ${mhConcerns.length > 0 ? `
+                        <div>
+                            <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide mb-3">Concerns by Drug</h3>
+                            ${mhConcerns.map(c => `
+                                <div class="mb-4 p-4 bg-slate-800/50 rounded-xl">
+                                    <h4 class="font-medium text-amber-400 mb-2">${c.drug} (${c.risk_level} risk)</h4>
+                                    <ul class="space-y-1">
+                                        ${c.effects.map(e => `<li class="text-sm text-slate-300">• ${e}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : '<p class="text-emerald-400">✓ No significant mental health concerns identified</p>'}
+                </div>
+            `;
+
+            // Physical health tab
+            document.getElementById('tab-physical').innerHTML = `
+                <div class="space-y-4">
+                    ${data.physical_health_impact.length > 0 
+                        ? data.physical_health_impact.map(p => `
+                            <div class="p-4 bg-slate-800/50 rounded-xl">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="font-medium text-slate-200">${p.system}</span>
+                                    <span class="text-xs px-2 py-0.5 rounded bg-slate-700 text-slate-400">${p.drug}</span>
+                                </div>
+                                <p class="text-sm text-slate-400">${p.impact}</p>
+                                <span class="text-xs text-slate-500">Severity: ${p.severity}</span>
+                            </div>
+                        `).join('')
+                        : '<p class="text-emerald-400">✓ No significant physical health concerns identified</p>'
+                    }
+                </div>
+            `;
+
+            // Interactions tab
+            document.getElementById('tab-interactions').innerHTML = `
+                <div class="space-y-4">
+                    ${data.drug_interactions.length > 0 
+                        ? data.drug_interactions.map(i => `
+                            <div class="p-4 bg-red-950/30 rounded-xl border border-red-900/50">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="text-red-400 font-medium">⚠️ ${i.drugs.join(' + ')}</span>
+                                    <span class="text-xs px-2 py-0.5 rounded bg-red-900/50 text-red-400">${i.severity}</span>
+                                </div>
+                                <p class="text-sm text-slate-300 mb-2">${i.description}</p>
+                                <p class="text-sm text-emerald-400">💡 ${i.recommendation}</p>
+                            </div>
+                        `).join('')
+                        : '<p class="text-emerald-400">✓ No significant drug-microbiome interactions detected</p>'
+                    }
+                </div>
+            `;
+
+            // Recommendations tab
+            document.getElementById('tab-recommendations').innerHTML = `
+                <div class="space-y-4">
+                    <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide mb-3">Personalized Recommendations</h3>
+                    ${data.recommendations.map(rec => `
+                        <div class="flex items-start gap-3 p-3 bg-emerald-950/30 rounded-lg border border-emerald-900/50">
+                            <span class="text-emerald-400">💡</span>
+                            <span class="text-slate-300">${rec}</span>
+                        </div>
+                    `).join('')}
+                    <div class="mt-6 p-4 bg-slate-800/50 rounded-xl">
+                        <p class="text-sm text-slate-400">
+                            <strong>Note:</strong> These recommendations are based on published research. 
+                            Always consult your healthcare provider before making changes to your medication regimen or starting new supplements.
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            // Show results
+            document.getElementById('results').classList.remove('hidden');
+            showTab('bacteria');
+        }
+
+        // Initialize
+        renderSelectedDrugs();
+    </script>
+</body>
+</html>
