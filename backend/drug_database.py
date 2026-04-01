@@ -1024,25 +1024,166 @@ def get_all_drug_names() -> List[str]:
     return sorted(set(names))
 
 def check_interactions(drugs: List[str]) -> List[Dict]:
-    """Check for interactions between multiple drugs."""
-    interactions = []
-    drug_classes = []
+    """Check for interactions between multiple drugs.
     
-    # Get classes for each drug
+    Combines hardcoded clinical rules with dynamic detection of
+    overlapping microbiome effects (compounding harm, opposing effects,
+    and compounding beneficial bacteria increases).
+    """
+    interactions = []
+    seen = set()  # deduplicate by drug pair + type
+    
+    # Resolve drug objects
+    drug_objects = []
     for drug_name in drugs:
         drug = find_drug(drug_name)
         if drug:
-            drug_classes.append((drug_name, drug["drug_class"].lower().split()[0]))
+            drug_objects.append(drug)
     
-    # Check pairwise interactions
-    for i, (drug1, class1) in enumerate(drug_classes):
-        for drug2, class2 in drug_classes[i+1:]:
-            # Check known interactions
+    # --- Phase 1: Hardcoded clinical interaction rules ---
+    # Map drug classes to short keys used in DRUG_INTERACTIONS
+    CLASS_KEY_MAP = {
+        "proton pump inhibitor": "ppi",
+        "ssri antidepressant": "ssri",
+        "nsaid": "nsaid",
+        "penicillin antibiotic": "antibiotic",
+        "macrolide antibiotic": "antibiotic",
+        "fluoroquinolone antibiotic": "antibiotic",
+        "opioid analgesic": "opioid",
+        "benzodiazepine": "benzodiazepine",
+        "biguanide antidiabetic": "biguanide",
+        "statin": "statin",
+        "hormonal contraceptive": "contraceptive",
+        "glp-1 receptor agonist": "glp1",
+        "second-generation antihistamine": "antihistamine",
+    }
+    
+    for i, d1 in enumerate(drug_objects):
+        key1 = CLASS_KEY_MAP.get(d1["drug_class"].lower(), d1["drug_class"].lower().split()[0])
+        for d2 in drug_objects[i+1:]:
+            key2 = CLASS_KEY_MAP.get(d2["drug_class"].lower(), d2["drug_class"].lower().split()[0])
             for (c1, c2), interaction in DRUG_INTERACTIONS.items():
-                if (c1 in class1 and c2 in class2) or (c2 in class1 and c1 in class2):
+                if (c1 == key1 and c2 == key2) or (c2 == key1 and c1 == key2):
+                    dup_key = (d1["drug_name"], d2["drug_name"], "clinical")
+                    if dup_key not in seen:
+                        seen.add(dup_key)
+                        interactions.append({
+                            "drugs": [d1["drug_name"], d2["drug_name"]],
+                            "type": "clinical",
+                            **interaction
+                        })
+    
+    # --- Phase 2: Dynamic microbiome overlap detection ---
+    MAGNITUDE_SCORE = {"mild": 1, "moderate": 2, "significant": 3}
+    
+    # Known harmful bacteria (increases are bad)
+    HARMFUL_TAXA = {
+        "enterococcus", "enterobacteriaceae", "clostridium difficile",
+        "candida", "proteobacteria", "streptococcus",
+        "erysipelotrichaceae", "desulfovibrionaceae",
+    }
+    
+    # Known beneficial bacteria (decreases are bad)
+    BENEFICIAL_TAXA = {
+        "lactobacillus", "bifidobacterium", "akkermansia",
+        "faecalibacterium", "roseburia", "coprococcus",
+        "muribaculaceae", "allobaculum", "lactobacillus reuteri",
+        "bifidobacterium longum",
+    }
+    
+    for i, d1 in enumerate(drug_objects):
+        eff1 = d1.get("microbiome_effects", {})
+        dec1 = {e["bacteria"].lower(): e for e in eff1.get("decreases", [])}
+        inc1 = {e["bacteria"].lower(): e for e in eff1.get("increases", [])}
+        
+        for d2 in drug_objects[i+1:]:
+            eff2 = d2.get("microbiome_effects", {})
+            dec2 = {e["bacteria"].lower(): e for e in eff2.get("decreases", [])}
+            inc2 = {e["bacteria"].lower(): e for e in eff2.get("increases", [])}
+            
+            pair = [d1["drug_name"], d2["drug_name"]]
+            
+            # 2a: Compounding depletion of beneficial bacteria
+            shared_decreases = set(dec1.keys()) & set(dec2.keys())
+            beneficial_shared = [b for b in shared_decreases if b in BENEFICIAL_TAXA]
+            if beneficial_shared:
+                combined = sum(
+                    MAGNITUDE_SCORE.get(dec1[b]["magnitude"], 1) + MAGNITUDE_SCORE.get(dec2[b]["magnitude"], 1)
+                    for b in beneficial_shared
+                )
+                if combined >= 4:
+                    severity = "high" if combined >= 6 else "moderate"
+                else:
+                    severity = "mild"
+                
+                bacteria_list = ", ".join(b.title() for b in beneficial_shared)
+                key = (d1["drug_name"], d2["drug_name"], "compounding_depletion")
+                if key not in seen:
+                    seen.add(key)
                     interactions.append({
-                        "drugs": [drug1, drug2],
-                        **interaction
+                        "drugs": pair,
+                        "type": "compounding_depletion",
+                        "severity": severity,
+                        "bacteria": beneficial_shared,
+                        "description": f"Both drugs reduce beneficial {bacteria_list}. Combined effect may significantly deplete these protective species.",
+                        "recommendation": f"Consider targeted probiotic support for {bacteria_list} strains. Space medications apart if possible."
                     })
+            
+            # 2b: Compounding increase of harmful bacteria
+            shared_increases = set(inc1.keys()) & set(inc2.keys())
+            harmful_shared = [b for b in shared_increases if b in HARMFUL_TAXA]
+            if harmful_shared:
+                combined = sum(
+                    MAGNITUDE_SCORE.get(inc1[b]["magnitude"], 1) + MAGNITUDE_SCORE.get(inc2[b]["magnitude"], 1)
+                    for b in harmful_shared
+                )
+                severity = "high" if combined >= 6 else "moderate" if combined >= 4 else "mild"
+                
+                bacteria_list = ", ".join(b.title() for b in harmful_shared)
+                key = (d1["drug_name"], d2["drug_name"], "compounding_overgrowth")
+                if key not in seen:
+                    seen.add(key)
+                    interactions.append({
+                        "drugs": pair,
+                        "type": "compounding_overgrowth",
+                        "severity": severity,
+                        "bacteria": harmful_shared,
+                        "description": f"Both drugs promote growth of potentially harmful {bacteria_list}. Combined effect increases overgrowth risk.",
+                        "recommendation": f"Monitor for symptoms of {bacteria_list} overgrowth. Probiotic competition therapy may help."
+                    })
+            
+            # 2c: Opposing effects (one increases what the other decreases)
+            conflicts = []
+            for bact in set(dec1.keys()) & set(inc2.keys()):
+                dec_score = MAGNITUDE_SCORE.get(dec1[bact]["magnitude"], 1)
+                inc_score = MAGNITUDE_SCORE.get(inc2[bact]["magnitude"], 1)
+                conflicts.append({"bacteria": bact, "decreased_by": d1["drug_name"], "increased_by": d2["drug_name"], "score": dec_score + inc_score})
+            for bact in set(dec2.keys()) & set(inc1.keys()):
+                if bact not in {c["bacteria"] for c in conflicts}:
+                    dec_score = MAGNITUDE_SCORE.get(dec2[bact]["magnitude"], 1)
+                    inc_score = MAGNITUDE_SCORE.get(inc1[bact]["magnitude"], 1)
+                    conflicts.append({"bacteria": bact, "decreased_by": d2["drug_name"], "increased_by": d1["drug_name"], "score": dec_score + inc_score})
+            
+            if conflicts:
+                top = max(conflicts, key=lambda c: c["score"])
+                total_score = sum(c["score"] for c in conflicts)
+                severity = "moderate" if total_score >= 6 else "mild"
+                
+                bacteria_list = ", ".join(c["bacteria"].title() for c in conflicts)
+                key = (d1["drug_name"], d2["drug_name"], "opposing")
+                if key not in seen:
+                    seen.add(key)
+                    interactions.append({
+                        "drugs": pair,
+                        "type": "opposing_effects",
+                        "severity": severity,
+                        "bacteria": [c["bacteria"] for c in conflicts],
+                        "description": f"These drugs have opposing effects on {bacteria_list}. For example, {top['increased_by']} increases {top['bacteria'].title()} while {top['decreased_by']} decreases it.",
+                        "recommendation": f"The net effect on {top['bacteria'].title()} is unpredictable. Discuss timing optimization with your pharmacist."
+                    })
+    
+    # Sort by severity
+    severity_order = {"severe": 0, "high": 1, "moderate": 2, "mild": 3}
+    interactions.sort(key=lambda x: severity_order.get(x.get("severity", "mild"), 4))
     
     return interactions

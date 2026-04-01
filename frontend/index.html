@@ -423,16 +423,36 @@
             `;
 
             // Interactions tab
+            const typeLabels = {
+                clinical: '💊 Clinical',
+                compounding_depletion: '📉 Compounding Depletion',
+                compounding_overgrowth: '📈 Compounding Overgrowth',
+                opposing_effects: '🔄 Opposing Effects'
+            };
+            const typeColors = {
+                clinical: 'bg-red-950/30 border-red-900/50',
+                compounding_depletion: 'bg-orange-950/30 border-orange-900/50',
+                compounding_overgrowth: 'bg-amber-950/30 border-amber-900/50',
+                opposing_effects: 'bg-purple-950/30 border-purple-900/50'
+            };
+            const typeBadgeColors = {
+                clinical: 'bg-red-900/50 text-red-400',
+                compounding_depletion: 'bg-orange-900/50 text-orange-400',
+                compounding_overgrowth: 'bg-amber-900/50 text-amber-400',
+                opposing_effects: 'bg-purple-900/50 text-purple-400'
+            };
             document.getElementById('tab-interactions').innerHTML = `
                 <div class="space-y-4">
                     ${data.drug_interactions.length > 0 
                         ? data.drug_interactions.map(i => `
-                            <div class="p-4 bg-red-950/30 rounded-xl border border-red-900/50">
-                                <div class="flex items-center gap-2 mb-2">
+                            <div class="p-4 ${typeColors[i.type] || 'bg-red-950/30 border-red-900/50'} rounded-xl border">
+                                <div class="flex items-center gap-2 mb-2 flex-wrap">
                                     <span class="text-red-400 font-medium">⚠️ ${i.drugs.join(' + ')}</span>
                                     <span class="text-xs px-2 py-0.5 rounded bg-red-900/50 text-red-400">${i.severity}</span>
+                                    <span class="text-xs px-2 py-0.5 rounded ${typeBadgeColors[i.type] || 'bg-slate-700 text-slate-400'}">${typeLabels[i.type] || i.type}</span>
                                 </div>
                                 <p class="text-sm text-slate-300 mb-2">${i.description}</p>
+                                ${i.bacteria ? `<p class="text-xs text-slate-500 mb-2">Affected: ${i.bacteria.map(b => b.charAt(0).toUpperCase() + b.slice(1)).join(', ')}</p>` : ''}
                                 <p class="text-sm text-emerald-400">💡 ${i.recommendation}</p>
                             </div>
                         `).join('')
@@ -442,9 +462,144 @@
             `;
 
             // Recommendations tab
-            document.getElementById('tab-recommendations').innerHTML = `
+            const ai = data.ai_recommendations;
+            const hasAI = ai && ai.probiotic_protocol;
+            
+            document.getElementById('tab-recommendations').innerHTML = hasAI ? `
+                <div class="space-y-6">
+                    <!-- AI Summary -->
+                    <div class="p-4 bg-slate-800/50 rounded-xl">
+                        <p class="text-slate-300">${ai.summary}</p>
+                    </div>
+
+                    <!-- Positive Notes -->
+                    ${ai.positive_notes && ai.positive_notes.length > 0 ? `
+                        <div>
+                            <h3 class="text-sm font-medium text-emerald-400 uppercase tracking-wide mb-3">✨ Good News</h3>
+                            <div class="space-y-2">
+                                ${ai.positive_notes.map(note => `
+                                    <div class="flex items-start gap-3 p-3 bg-emerald-950/30 rounded-lg border border-emerald-900/50">
+                                        <span class="text-emerald-400 mt-0.5">✓</span>
+                                        <span class="text-slate-300">${note}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Top Concerns -->
+                    ${ai.top_concerns && ai.top_concerns.length > 0 ? `
+                        <div>
+                            <h3 class="text-sm font-medium text-amber-400 uppercase tracking-wide mb-3">⚠️ Key Concerns</h3>
+                            <div class="space-y-2">
+                                ${ai.top_concerns.map(c => `
+                                    <div class="flex items-start gap-3 p-3 bg-amber-950/30 rounded-lg border border-amber-900/50">
+                                        <span class="text-amber-400 mt-0.5">•</span>
+                                        <span class="text-slate-300">${c}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Probiotic Protocol -->
+                    <div>
+                        <h3 class="text-sm font-medium text-blue-400 uppercase tracking-wide mb-3">🧬 Probiotic Protocol</h3>
+                        <div class="space-y-3">
+                            ${ai.probiotic_protocol.map(p => `
+                                <div class="p-4 bg-blue-950/30 rounded-xl border border-blue-900/50">
+                                    <div class="flex items-baseline gap-2 mb-2">
+                                        <span class="font-medium text-blue-300">${p.strain}</span>
+                                        <span class="text-xs px-2 py-0.5 rounded bg-blue-900/50 text-blue-400">${p.cfu}</span>
+                                    </div>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                                        <div><span class="text-slate-500">Timing:</span> <span class="text-slate-300">${p.timing}</span></div>
+                                        <div><span class="text-slate-500">Duration:</span> <span class="text-slate-300">${p.duration}</span></div>
+                                    </div>
+                                    <p class="text-sm text-slate-400 mt-2">${p.reason}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Medication Timing -->
+                    ${ai.medication_timing && ai.medication_timing.length > 0 ? `
+                        <div>
+                            <h3 class="text-sm font-medium text-purple-400 uppercase tracking-wide mb-3">⏰ Medication Timing</h3>
+                            <div class="space-y-2">
+                                ${ai.medication_timing.map(t => `
+                                    <div class="p-3 bg-purple-950/30 rounded-lg border border-purple-900/50">
+                                        <span class="font-medium text-purple-300">${t.drug}</span>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 text-sm">
+                                            <div><span class="text-slate-500">Best time:</span> <span class="text-slate-300">${t.best_time}</span></div>
+                                            <div><span class="text-slate-500">Probiotic gap:</span> <span class="text-slate-300">${t.probiotic_gap}</span></div>
+                                            ${t.food_note ? `<div><span class="text-slate-500">Food:</span> <span class="text-slate-300">${t.food_note}</span></div>` : ''}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Dietary Protocol -->
+                    ${ai.dietary_protocol && ai.dietary_protocol.length > 0 ? `
+                        <div>
+                            <h3 class="text-sm font-medium text-green-400 uppercase tracking-wide mb-3">🥗 Dietary Protocol</h3>
+                            <div class="space-y-2">
+                                ${ai.dietary_protocol.map(d => `
+                                    <div class="p-3 bg-green-950/30 rounded-lg border border-green-900/50">
+                                        <div class="flex items-baseline gap-2 mb-1">
+                                            <span class="font-medium text-green-300">${d.food}</span>
+                                            ${d.serving ? `<span class="text-xs text-slate-500">${d.serving}</span>` : ''}
+                                        </div>
+                                        ${d.timing ? `<p class="text-sm text-slate-400">${d.timing}</p>` : ''}
+                                        <p class="text-sm text-slate-400">${d.benefit}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Monitoring & Doctor -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${ai.monitoring && ai.monitoring.length > 0 ? `
+                            <div>
+                                <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide mb-3">📋 Monitor For</h3>
+                                <div class="space-y-2">
+                                    ${ai.monitoring.map(m => `
+                                        <div class="flex items-start gap-2 p-2 text-sm">
+                                            <span class="text-slate-500">•</span>
+                                            <span class="text-slate-300">${m}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        ${ai.when_to_consult_doctor && ai.when_to_consult_doctor.length > 0 ? `
+                            <div>
+                                <h3 class="text-sm font-medium text-red-400 uppercase tracking-wide mb-3">🚨 See Your Doctor If</h3>
+                                <div class="space-y-2">
+                                    ${ai.when_to_consult_doctor.map(w => `
+                                        <div class="flex items-start gap-2 p-2 text-sm">
+                                            <span class="text-red-400">•</span>
+                                            <span class="text-slate-300">${w}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="p-4 bg-slate-800/50 rounded-xl">
+                        <p class="text-sm text-slate-400">
+                            <strong>Note:</strong> These AI-generated recommendations are based on published research and your specific drug combination.
+                            Always consult your healthcare provider before starting new supplements or changing medication timing.
+                        </p>
+                    </div>
+                </div>
+            ` : `
                 <div class="space-y-4">
-                    <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide mb-3">Personalized Recommendations</h3>
+                    <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wide mb-3">Recommendations</h3>
                     ${data.recommendations.map(rec => `
                         <div class="flex items-start gap-3 p-3 bg-emerald-950/30 rounded-lg border border-emerald-900/50">
                             <span class="text-emerald-400">💡</span>

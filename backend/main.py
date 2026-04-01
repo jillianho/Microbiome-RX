@@ -263,11 +263,23 @@ async def get_ai_recommendations(request: AnalyzeRequest):
     # First get the analysis
     analysis = await analyze_drugs(request)
     
+    # Separate beneficial vs harmful drugs for the prompt
+    beneficial_drugs = []
+    harmful_drugs = []
+    for d in analysis["drug_details"]:
+        risk = d.get("mental_health_impact", {}).get("risk_level", "")
+        if risk == "beneficial":
+            beneficial_drugs.append(d["drug_name"])
+        else:
+            harmful_drugs.append(d["drug_name"])
+
     # Build prompt
-    prompt = f"""You are a pharmacist and gut health expert. A user is taking these medications:
+    prompt = f"""You are a clinical pharmacist specializing in the gut microbiome and probiotic therapy. A user is taking these medications:
 {', '.join(analysis['drugs_analyzed'])}
 
-Based on research, here's what we know about their microbiome effects:
+{"DRUGS WITH POSITIVE MICROBIOME EFFECTS: " + ', '.join(beneficial_drugs) if beneficial_drugs else ""}
+
+Based on published research, here are the microbiome effects:
 
 BACTERIA DECREASED:
 {json.dumps(analysis['bacteria_decreased'], indent=2)}
@@ -278,22 +290,51 @@ BACTERIA INCREASED:
 DRUG INTERACTIONS:
 {json.dumps(analysis['drug_interactions'], indent=2)}
 
-Please provide personalized recommendations in this JSON format:
+Provide highly specific, evidence-based recommendations. For probiotics, use full strain names (genus + species + strain identifier, e.g. "Lactobacillus rhamnosus GG") and include CFU dosing. For timing, specify hours relative to each medication.
+
+Respond with this exact JSON schema:
 {{
-    "summary": "2-3 sentence summary of the overall microbiome impact",
-    "top_concerns": ["concern 1", "concern 2", "concern 3"],
-    "probiotic_suggestions": [
-        {{"strain": "Lactobacillus rhamnosus", "reason": "why this helps"}}
+    "summary": "2-3 sentence summary of overall microbiome impact, mentioning any drugs that help the microbiome",
+    "positive_notes": [
+        "Note about each drug that has beneficial microbiome effects (e.g. semaglutide boosting Akkermansia). Omit this array entirely if no drugs are beneficial."
     ],
-    "dietary_suggestions": [
-        {{"food": "food name", "benefit": "how it helps"}}
+    "top_concerns": ["specific concern 1", "specific concern 2"],
+    "probiotic_protocol": [
+        {{
+            "strain": "Lactobacillus rhamnosus GG (LGG)",
+            "cfu": "10-20 billion CFU",
+            "timing": "Take 2 hours after medication, with food",
+            "duration": "Minimum 4 weeks; ongoing if on chronic therapy",
+            "reason": "Specifically replenishes Lactobacillus depleted by [drug]. Well-studied strain with strong evidence for antibiotic-associated diarrhea prevention."
+        }}
     ],
-    "timing_suggestions": ["when to take meds relative to each other"],
-    "lifestyle_suggestions": ["other helpful tips"],
-    "when_to_consult_doctor": ["red flags to watch for"]
+    "dietary_protocol": [
+        {{
+            "food": "specific food name",
+            "serving": "specific amount (e.g., 1 cup daily)",
+            "timing": "when to eat relative to medications",
+            "benefit": "which specific bacteria or pathway this supports"
+        }}
+    ],
+    "medication_timing": [
+        {{
+            "drug": "drug name",
+            "best_time": "e.g., morning with breakfast",
+            "probiotic_gap": "e.g., take probiotic 2+ hours after this drug",
+            "food_note": "e.g., take with food to reduce GI effects"
+        }}
+    ],
+    "lifestyle_suggestions": ["specific actionable tip with rationale"],
+    "monitoring": ["specific symptom or sign to watch for and when to act"],
+    "when_to_consult_doctor": ["specific red flag requiring medical attention"]
 }}
 
-Respond ONLY with valid JSON, no markdown."""
+IMPORTANT:
+- Use full strain names with strain identifiers (e.g. "Saccharomyces boulardii CNCM I-745", not just "S. boulardii")
+- CFU doses should be specific ranges based on clinical evidence
+- If a drug IMPROVES the microbiome (like semaglutide or metformin), highlight that in positive_notes and adjust probiotic recommendations accordingly — the user may need fewer supplements
+- Tailor everything to the specific combination of drugs provided
+- Respond ONLY with valid JSON, no markdown"""
 
     try:
         async with httpx.AsyncClient() as client:
@@ -306,7 +347,7 @@ Respond ONLY with valid JSON, no markdown."""
                 },
                 json={
                     "model": "claude-sonnet-4-20250514",
-                    "max_tokens": 1500,
+                    "max_tokens": 3000,
                     "messages": [{"role": "user", "content": prompt}]
                 },
                 timeout=60
