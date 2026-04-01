@@ -29,6 +29,31 @@ KEY REFERENCES:
    - NSAIDs alter microbiome composition
    - Contribute to gut permeability
 
+6. Duan X, et al. (2024) "Semaglutide alleviates gut microbiota dysbiosis induced by 
+   a high-fat diet." European Journal of Pharmacology 969:176440.
+   - Semaglutide significantly increased Akkermansia abundance
+   - Restored gut barrier tight junction proteins
+
+7. Feng J, et al. (2024) "Effects of semaglutide on gut microbiota, cognitive function 
+   and inflammation in obese mice." PeerJ 12:e17891.
+   - Semaglutide reversed HFD-induced gut microbiota dysbiosis
+   - Akkermansia increased ~166x vs HFD group
+
+8. Gofron KK, et al. (2025) "Effects of GLP-1 analogues and agonists on the gut 
+   microbiota: a systematic review." Nutrients 17(8):1303.
+   - Systematic review of 38 studies on GLP-1 drugs and microbiome
+   - A. muciniphila consistently increased across GLP-1 agonists
+
+9. Hammouda ZK, et al. (2025) "Fexofenadine HCl enhances growth, biofilm, and lactic 
+   acid production of Limosilactobacillus reuteri and Bifidobacterium longum." 
+   BMC Microbiology.
+   - Fexofenadine enhanced beneficial bacteria growth
+   - Cetirizine and desloratadine inhibited tested bacteria
+
+10. Xie Y, et al. (2024) "Loratadine as an anti-inflammatory agent against 
+    Clostridium difficile toxin B." J Infectious Diseases 230(3):545.
+    - Loratadine showed anti-inflammatory effects against C. diff toxin
+
 NOTE: This is for educational/demonstration purposes only.
 Not intended for clinical decision-making.
 """
@@ -535,6 +560,57 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
     },
 
     # =========================================================================
+    # GLP-1 RECEPTOR AGONISTS
+    # =========================================================================
+    "semaglutide": {
+        "drug_name": "Semaglutide",
+        "brand_names": ["Ozempic", "Wegovy", "Rybelsus"],
+        "drug_class": "GLP-1 Receptor Agonist",
+        "common_uses": ["Type 2 diabetes", "Obesity", "Weight management"],
+        "microbiome_effects": {
+            "decreases": [
+                {"bacteria": "Desulfovibrionaceae", "magnitude": "moderate", "mechanism": "Reduced abundance of sulfate-reducing bacteria linked to inflammation"},
+                {"bacteria": "Romboutsia", "magnitude": "moderate", "mechanism": "Shifts away from obesity-associated taxa"},
+                {"bacteria": "Lachnospiraceae_NK4A136_group", "magnitude": "moderate", "mechanism": "Compositional shift toward healthier profile"},
+            ],
+            "increases": [
+                {"bacteria": "Akkermansia", "magnitude": "significant", "mechanism": "Enhanced mucin production and gut barrier integrity"},
+                {"bacteria": "Muribaculaceae", "magnitude": "moderate", "mechanism": "Supports SCFA production (succinate, acetate, propionate)"},
+                {"bacteria": "Allobaculum", "magnitude": "moderate", "mechanism": "Restored by semaglutide in dysbiotic states"},
+                {"bacteria": "Lactobacillus", "magnitude": "mild", "mechanism": "Indirect support via improved gut environment"},
+            ],
+            "overall_diversity": "restored toward healthy baseline (variable across studies)",
+        },
+        "mental_health_impact": {
+            "risk_level": "beneficial",
+            "effects": [
+                "Increased Akkermansia linked to reduced neuroinflammation",
+                "Attenuates anxiety and depressive-like behaviors via microbiota-gut-brain axis",
+                "Reduces pro-inflammatory cytokines IL-6 and IL-1β",
+                "Improved cognitive function observed in obese mouse models",
+                "Initial GI symptoms (nausea) may cause temporary distress"
+            ],
+            "evidence_strength": "moderate (animal studies; human microbiome data emerging)"
+        },
+        "physical_health_impact": {
+            "effects": [
+                {"system": "Metabolic", "impact": "Significant weight loss and improved insulin sensitivity", "severity": "beneficial"},
+                {"system": "Gut barrier", "impact": "Restores tight junction proteins (occludin, Tjp1) and Muc-2 expression", "severity": "beneficial"},
+                {"system": "Digestive", "impact": "Nausea, vomiting, diarrhea common initially", "severity": "mild to moderate, temporary"},
+                {"system": "Inflammatory", "impact": "Reduced systemic and hepatic inflammation", "severity": "beneficial"},
+            ]
+        },
+        "recommendations": [
+            "Start at low dose and titrate up to reduce GI side effects",
+            "GI side effects (nausea) typically improve over weeks",
+            "One of few drugs with positive microbiome effects (similar to metformin)",
+            "May synergize with Akkermansia-supporting foods (polyphenols, fiber)",
+            "Monitor for pancreatitis symptoms (rare but serious)"
+        ],
+        "citations": ["Duan 2024", "Feng 2024", "Gofron 2025", "de Paiva 2024", "Chen 2025"]
+    },
+
+    # =========================================================================
     # STATINS
     # =========================================================================
     "atorvastatin": {
@@ -615,6 +691,122 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
             "Maintain diverse diet for microbiome health"
         ],
         "citations": ["Vich Vila 2020"]
+    },
+
+    # =========================================================================
+    # SECOND-GENERATION ANTIHISTAMINES
+    # =========================================================================
+    "cetirizine": {
+        "drug_name": "Cetirizine",
+        "brand_names": ["Zyrtec", "Reactine"],
+        "drug_class": "Second-Generation Antihistamine",
+        "common_uses": ["Allergic rhinitis", "Urticaria", "Hay fever", "Allergies"],
+        "microbiome_effects": {
+            "decreases": [
+                {"bacteria": "Lactobacillus", "magnitude": "mild", "mechanism": "In vitro growth inhibition of beneficial strains"},
+                {"bacteria": "Bifidobacterium", "magnitude": "mild", "mechanism": "Direct antimicrobial activity at gut concentrations"},
+            ],
+            "increases": [],
+            "overall_diversity": "minimal change at standard doses",
+        },
+        "mental_health_impact": {
+            "risk_level": "low",
+            "effects": [
+                "Minimal CNS penetration (second-generation)",
+                "Mild sedation possible — less than first-generation antihistamines",
+                "Mildly inhibits beneficial bacteria (unlike fexofenadine, which promotes them)",
+                "No significant mood effects reported"
+            ],
+            "evidence_strength": "limited"
+        },
+        "physical_health_impact": {
+            "effects": [
+                {"system": "Immune", "impact": "Effective allergy symptom relief", "severity": "beneficial"},
+                {"system": "Digestive", "impact": "Mild inhibition of Lactobacillus and Bifidobacterium; consider fexofenadine for better gut profile", "severity": "mild"},
+                {"system": "CNS", "impact": "Mild drowsiness in some individuals", "severity": "mild"},
+            ]
+        },
+        "recommendations": [
+            "Has the most antimicrobial activity of the three common second-gen antihistamines",
+            "Mildly inhibits Lactobacillus and Bifidobacterium in vitro — clinical significance at standard doses unclear",
+            "If gut health is a priority, switch to fexofenadine (Allegra), which uniquely promotes beneficial bacteria",
+            "Probiotic support may help offset mild inhibitory effects during long-term use"
+        ],
+        "citations": ["Maier 2018", "Hammouda 2025"]
+    },
+
+    "loratadine": {
+        "drug_name": "Loratadine",
+        "brand_names": ["Claritin", "Alavert"],
+        "drug_class": "Second-Generation Antihistamine",
+        "common_uses": ["Allergic rhinitis", "Urticaria", "Hay fever", "Allergies"],
+        "microbiome_effects": {
+            "decreases": [
+                {"bacteria": "Lactobacillus", "magnitude": "mild", "mechanism": "Mild antimicrobial properties"},
+            ],
+            "increases": [],
+            "overall_diversity": "minimal change",
+        },
+        "mental_health_impact": {
+            "risk_level": "low",
+            "effects": [
+                "Non-sedating — minimal CNS effects",
+                "No significant microbiome-mediated mood effects reported",
+                "Anti-inflammatory properties may have indirect benefits",
+                "Milder antimicrobial effects than cetirizine; fexofenadine is the best gut option"
+            ],
+            "evidence_strength": "limited"
+        },
+        "physical_health_impact": {
+            "effects": [
+                {"system": "Immune", "impact": "Effective allergy symptom relief", "severity": "beneficial"},
+                {"system": "Digestive", "impact": "Mild Lactobacillus inhibition; anti-inflammatory effect against C. difficile toxin B", "severity": "mild"},
+            ]
+        },
+        "recommendations": [
+            "Middle option for gut health — milder antimicrobial effects than cetirizine (Zyrtec)",
+            "Bonus: shows anti-inflammatory properties against C. difficile toxin B",
+            "For best microbiome outcome, fexofenadine (Allegra) is preferred — it actively promotes beneficial bacteria",
+            "No specific probiotic intervention needed at standard doses"
+        ],
+        "citations": ["Maier 2018", "Xie 2024"]
+    },
+
+    "fexofenadine": {
+        "drug_name": "Fexofenadine",
+        "brand_names": ["Allegra", "Telfast"],
+        "drug_class": "Second-Generation Antihistamine",
+        "common_uses": ["Allergic rhinitis", "Urticaria", "Hay fever", "Allergies"],
+        "microbiome_effects": {
+            "decreases": [],
+            "increases": [
+                {"bacteria": "Lactobacillus reuteri", "magnitude": "mild", "mechanism": "Enhanced growth and biofilm formation of beneficial strains"},
+                {"bacteria": "Bifidobacterium longum", "magnitude": "mild", "mechanism": "Enhanced growth and lactic acid production"},
+            ],
+            "overall_diversity": "minimal change to mildly beneficial",
+        },
+        "mental_health_impact": {
+            "risk_level": "low",
+            "effects": [
+                "Non-sedating — does not cross blood-brain barrier",
+                "No significant CNS or mood effects",
+                "Only antihistamine shown to promote beneficial gut bacteria (may support gut-brain axis)"
+            ],
+            "evidence_strength": "emerging"
+        },
+        "physical_health_impact": {
+            "effects": [
+                {"system": "Immune", "impact": "Effective allergy symptom relief", "severity": "beneficial"},
+                {"system": "Digestive", "impact": "Promotes Lactobacillus and Bifidobacterium growth — opposite effect to cetirizine/loratadine", "severity": "beneficial"},
+            ]
+        },
+        "recommendations": [
+            "Best antihistamine for gut health — the only one shown to promote beneficial bacteria",
+            "Enhances Lactobacillus reuteri and Bifidobacterium longum (cetirizine and loratadine mildly inhibit them)",
+            "Recommended first-line antihistamine for patients concerned about microbiome",
+            "Non-sedating (does not cross blood-brain barrier) and well-tolerated"
+        ],
+        "citations": ["Hammouda 2025", "Maier 2018"]
     },
 
     # =========================================================================
@@ -745,6 +937,16 @@ DRUG_CLASS_EFFECTS = {
         "overall_impact": "negative",
         "summary": "Opioids slow gut motility, causing constipation that disrupts the microbiome. They also affect immune function, which impacts gut bacteria.",
         "key_concerns": ["Severe constipation", "Dysbiosis", "Immune effects"],
+    },
+    "GLP-1 Receptor Agonist": {
+        "overall_impact": "positive",
+        "summary": "GLP-1 receptor agonists like semaglutide have been shown to significantly increase beneficial Akkermansia, restore gut barrier integrity, and shift microbiota composition toward a healthier profile. Effects are similar to metformin in being one of the few drug classes that improve the gut microbiome.",
+        "key_concerns": ["Initial GI side effects (nausea, vomiting)", "Effects may vary by metabolic state"],
+    },
+    "Second-Generation Antihistamine": {
+        "overall_impact": "varies by drug",
+        "summary": "Not all antihistamines are equal for gut health. Fexofenadine (Allegra) is the clear winner — it uniquely promotes Lactobacillus and Bifidobacterium growth. Loratadine (Claritin) is a neutral middle ground with a C. diff–protective bonus. Cetirizine (Zyrtec) has the most antimicrobial activity, mildly inhibiting beneficial bacteria. For allergy patients who care about their microbiome, fexofenadine is the best choice.",
+        "key_concerns": ["Cetirizine mildly inhibits Lactobacillus & Bifidobacterium", "Fexofenadine is the gut-friendly choice"],
     },
 }
 
