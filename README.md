@@ -2,7 +2,7 @@
 
 **Drug-Microbiome Interaction Analyzer**
 
-Discover how your medications affect your gut bacteria — and what that means for your mental and physical health.
+MicrobiomeRx is a tool that analyzes how medications alter the gut microbiome and translates those effects into actionable mental and physical health insights.
 
 ## Features
 
