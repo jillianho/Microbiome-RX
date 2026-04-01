@@ -15,13 +15,22 @@ import logging
 import json
 import re
 
-from drug_database import (
-    DRUG_DATABASE,
-    DRUG_CLASS_EFFECTS,
-    find_drug,
-    get_all_drug_names,
-    check_interactions,
-)
+try:
+    from backend.drug_database import (
+        DRUG_DATABASE,
+        DRUG_CLASS_EFFECTS,
+        find_drug,
+        get_all_drug_names,
+        check_interactions,
+    )
+except ImportError:
+    from drug_database import (
+        DRUG_DATABASE,
+        DRUG_CLASS_EFFECTS,
+        find_drug,
+        get_all_drug_names,
+        check_interactions,
+    )
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
