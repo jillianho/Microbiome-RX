@@ -85,6 +85,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Enterobacteriaceae", "magnitude": "moderate", "mechanism": "Reduced acid barrier"},
             ],
             "overall_diversity": "decreased",
+            "evidence_strength": "strong"
         },
         "mental_health_impact": {
             "risk_level": "moderate",
@@ -126,6 +127,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Streptococcus", "magnitude": "moderate", "mechanism": "Oral-gut translocation"},
             ],
             "overall_diversity": "decreased",
+            "evidence_strength": "strong"
         },
         "mental_health_impact": {
             "risk_level": "moderate",
@@ -166,6 +168,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Bacteroides", "magnitude": "mild", "mechanism": "Indirect selection"},
             ],
             "overall_diversity": "mildly decreased",
+            "evidence_strength": "moderate"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -201,6 +204,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
             ],
             "increases": [],
             "overall_diversity": "minimal change",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -238,6 +242,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Prevotella", "magnitude": "mild", "mechanism": "Indirect selection"},
             ],
             "overall_diversity": "mildly decreased",
+            "evidence_strength": "moderate"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -281,6 +286,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Erysipelotrichaceae", "magnitude": "mild", "mechanism": "Inflammatory environment"},
             ],
             "overall_diversity": "decreased with chronic use",
+            "evidence_strength": "moderate"
         },
         "mental_health_impact": {
             "risk_level": "moderate",
@@ -321,6 +327,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Enterobacteriaceae", "magnitude": "moderate", "mechanism": "Permeability changes"},
             ],
             "overall_diversity": "decreased with chronic use",
+            "evidence_strength": "moderate"
         },
         "mental_health_impact": {
             "risk_level": "moderate",
@@ -358,6 +365,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Bacteroides", "magnitude": "mild", "mechanism": "Selection effects"},
             ],
             "overall_diversity": "minimal change at low doses",
+            "evidence_strength": "moderate"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -402,6 +410,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Clostridium difficile", "magnitude": "moderate", "mechanism": "Loss of colonization resistance"},
             ],
             "overall_diversity": "significantly decreased",
+            "evidence_strength": "strong"
         },
         "mental_health_impact": {
             "risk_level": "high",
@@ -444,6 +453,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Proteobacteria", "magnitude": "moderate", "mechanism": "Resistance"},
             ],
             "overall_diversity": "moderately decreased",
+            "evidence_strength": "strong"
         },
         "mental_health_impact": {
             "risk_level": "moderate",
@@ -486,6 +496,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Candida", "magnitude": "moderate", "mechanism": "Fungal overgrowth"},
             ],
             "overall_diversity": "severely decreased",
+            "evidence_strength": "strong"
         },
         "mental_health_impact": {
             "risk_level": "high",
@@ -532,6 +543,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Escherichia", "magnitude": "mild", "mechanism": "Glucose availability"},
             ],
             "overall_diversity": "increased (beneficial shift)",
+            "evidence_strength": "strong"
         },
         "mental_health_impact": {
             "risk_level": "beneficial",
@@ -580,6 +592,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Lactobacillus", "magnitude": "mild", "mechanism": "Indirect support via improved gut environment"},
             ],
             "overall_diversity": "restored toward healthy baseline (variable across studies)",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "beneficial",
@@ -627,6 +640,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Lactobacillus", "magnitude": "mild", "mechanism": "Indirect effects"},
             ],
             "overall_diversity": "minimal change to slight increase",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -668,6 +682,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Prevotella", "magnitude": "mild", "mechanism": "Hormone effects"},
             ],
             "overall_diversity": "mild changes",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "mild",
@@ -708,6 +723,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
             ],
             "increases": [],
             "overall_diversity": "minimal change at standard doses",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -746,6 +762,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
             ],
             "increases": [],
             "overall_diversity": "minimal change",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -784,6 +801,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Bifidobacterium longum", "magnitude": "mild", "mechanism": "Enhanced growth and lactic acid production"},
             ],
             "overall_diversity": "minimal change to mildly beneficial",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "low",
@@ -823,6 +841,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
             ],
             "increases": [],
             "overall_diversity": "minimal change",
+            "evidence_strength": "emerging"
         },
         "mental_health_impact": {
             "risk_level": "low (direct)",
@@ -865,6 +884,7 @@ DRUG_DATABASE: Dict[str, Dict[str, Any]] = {
                 {"bacteria": "Staphylococcus", "magnitude": "mild", "mechanism": "Immune suppression"},
             ],
             "overall_diversity": "decreased",
+            "evidence_strength": "moderate"
         },
         "mental_health_impact": {
             "risk_level": "moderate",
@@ -1070,6 +1090,7 @@ def check_interactions(drugs: List[str]) -> List[Dict]:
                         interactions.append({
                             "drugs": [d1["drug_name"], d2["drug_name"]],
                             "type": "clinical",
+                            "confidence": "confirmed",
                             **interaction
                         })
     
@@ -1120,12 +1141,23 @@ def check_interactions(drugs: List[str]) -> List[Dict]:
                 key = (d1["drug_name"], d2["drug_name"], "compounding_depletion")
                 if key not in seen:
                     seen.add(key)
+                    explanation = (
+                        f"Both {pair[0]} and {pair[1]} reduce beneficial {bacteria_list} levels. "
+                        f"Taking them together may cause {severity} depletion of "
+                        f"{'this protective species' if len(beneficial_shared) == 1 else 'these protective species'}, "
+                        f"weakening gut health."
+                    )
                     interactions.append({
                         "drugs": pair,
+                        "interaction_type": "compounding_harm",
                         "type": "compounding_depletion",
+                        "confidence": _compute_confidence([d1, d2], len(beneficial_shared)),
+                        "affected_bacteria": beneficial_shared,
+                        "combined_severity": severity,
                         "severity": severity,
                         "bacteria": beneficial_shared,
-                        "description": f"Both drugs reduce beneficial {bacteria_list}. Combined effect may significantly deplete these protective species.",
+                        "explanation": explanation,
+                        "description": explanation,
                         "recommendation": f"Consider targeted probiotic support for {bacteria_list} strains. Space medications apart if possible."
                     })
             
@@ -1143,12 +1175,22 @@ def check_interactions(drugs: List[str]) -> List[Dict]:
                 key = (d1["drug_name"], d2["drug_name"], "compounding_overgrowth")
                 if key not in seen:
                     seen.add(key)
+                    explanation = (
+                        f"{pair[0]} and {pair[1]} both encourage {bacteria_list} growth. "
+                        f"Together, this creates a {severity} risk of overgrowth, "
+                        f"which may lead to digestive issues or infections."
+                    )
                     interactions.append({
                         "drugs": pair,
+                        "interaction_type": "compounding_harm",
                         "type": "compounding_overgrowth",
+                        "confidence": _compute_confidence([d1, d2], len(harmful_shared)),
+                        "affected_bacteria": harmful_shared,
+                        "combined_severity": severity,
                         "severity": severity,
                         "bacteria": harmful_shared,
-                        "description": f"Both drugs promote growth of potentially harmful {bacteria_list}. Combined effect increases overgrowth risk.",
+                        "explanation": explanation,
+                        "description": explanation,
                         "recommendation": f"Monitor for symptoms of {bacteria_list} overgrowth. Probiotic competition therapy may help."
                     })
             
@@ -1173,17 +1215,549 @@ def check_interactions(drugs: List[str]) -> List[Dict]:
                 key = (d1["drug_name"], d2["drug_name"], "opposing")
                 if key not in seen:
                     seen.add(key)
+                    affected = [c["bacteria"] for c in conflicts]
+                    explanation = (
+                        f"{top['decreased_by']} may reduce the {top['bacteria'].title()} increase from "
+                        f"{top['increased_by']}, potentially undermining its gut health benefits."
+                        + (f" They also have opposing effects on {', '.join(c['bacteria'].title() for c in conflicts if c['bacteria'] != top['bacteria'])}." if len(conflicts) > 1 else "")
+                    )
                     interactions.append({
                         "drugs": pair,
+                        "interaction_type": "opposing_effects",
                         "type": "opposing_effects",
+                        "confidence": _compute_confidence([d1, d2], len(conflicts)),
+                        "affected_bacteria": affected,
+                        "combined_severity": severity,
                         "severity": severity,
-                        "bacteria": [c["bacteria"] for c in conflicts],
-                        "description": f"These drugs have opposing effects on {bacteria_list}. For example, {top['increased_by']} increases {top['bacteria'].title()} while {top['decreased_by']} decreases it.",
+                        "bacteria": affected,
+                        "explanation": explanation,
+                        "description": explanation,
                         "recommendation": f"The net effect on {top['bacteria'].title()} is unpredictable. Discuss timing optimization with your pharmacist."
                     })
     
     # Sort by severity
-    severity_order = {"severe": 0, "high": 1, "moderate": 2, "mild": 3}
-    interactions.sort(key=lambda x: severity_order.get(x.get("severity", "mild"), 4))
+    severity_order = {"critical": 0, "severe": 1, "significant": 2, "moderate": 3, "mild": 4}
+    interactions.sort(key=lambda x: severity_order.get(x.get("severity", "mild"), 5))
     
     return interactions
+
+
+# =============================================================================
+# COMBINED MICROBIOME PREDICTION
+# =============================================================================
+
+# Shared scoring constants
+_MAGNITUDE_SCORE = {"mild": 1, "moderate": 2, "significant": 3}
+
+# Known harmful bacteria (increases are bad)
+_HARMFUL_TAXA = {
+    "enterococcus", "enterobacteriaceae", "clostridium difficile",
+    "candida", "proteobacteria", "streptococcus",
+    "erysipelotrichaceae", "desulfovibrionaceae",
+}
+
+# Known beneficial bacteria (decreases are bad)
+_BENEFICIAL_TAXA = {
+    "lactobacillus", "bifidobacterium", "akkermansia",
+    "faecalibacterium", "roseburia", "coprococcus",
+    "muribaculaceae", "allobaculum", "lactobacillus reuteri",
+    "bifidobacterium longum",
+}
+
+
+def _parse_diversity_score(text: str) -> int:
+    """Map free-text overall_diversity values to numeric scores.
+
+    Scale: -3 (severely decreased) to +2 (increased/restored).
+    """
+    t = text.lower().strip()
+    if "severely" in t:
+        return -3
+    if "significantly" in t:
+        return -3
+    if "moderately" in t:
+        return -2
+    if "restored" in t or "beneficial" in t:
+        return 2
+    if "increased" in t:
+        return 2
+    if "slight increase" in t:
+        return 1
+    if "mildly decreased" in t or "mildly beneficial" in t:
+        return -1 if "decreased" in t else 1
+    if "decreased" in t:
+        return -2
+    if "mild change" in t or "mild changes" in t:
+        return -1
+    # "minimal change" and everything else
+    return 0
+
+
+def _diversity_severity(score: int) -> str:
+    """Map combined diversity score to a severity label."""
+    if score <= -6:
+        return "critical"
+    if score <= -4:
+        return "severe"
+    if score <= -2:
+        return "significant"
+    if score <= -1:
+        return "moderate"
+    if score == 0:
+        return "neutral"
+    return "beneficial"
+
+
+# Evidence strength scoring: higher = more confident
+_EVIDENCE_SCORE = {"strong": 3, "moderate": 2, "emerging": 1, "limited": 0}
+
+
+def _compute_confidence(drug_objects: list, shared_count: int) -> str:
+    """Compute prediction confidence weighted by evidence strength.
+
+    Rules:
+    - Base confidence from shared bacteria count: 2+ = high, 1 = moderate
+    - Evidence caps the result: if the weakest drug is 'emerging', cap at moderate;
+      if 'limited', cap at low
+    - Two 'strong' evidence drugs with 2+ shared bacteria = confirmed
+    """
+    evidence_levels = [
+        d.get("microbiome_effects", {}).get("evidence_strength", "emerging")
+        for d in drug_objects
+    ]
+    min_evidence = min(_EVIDENCE_SCORE.get(e, 0) for e in evidence_levels)
+
+    # Base confidence from shared bacteria count
+    if shared_count >= 2:
+        base = "high"
+    else:
+        base = "moderate"
+
+    # Evidence-based ceiling
+    if min_evidence >= 3:  # all strong
+        ceiling = "confirmed" if shared_count >= 2 else "high"
+    elif min_evidence >= 2:  # weakest is moderate
+        ceiling = "high"
+    elif min_evidence >= 1:  # weakest is emerging
+        ceiling = "moderate"
+    else:  # limited
+        ceiling = "low"
+
+    # Return the lower of base and ceiling
+    rank = {"confirmed": 4, "high": 3, "moderate": 2, "low": 1}
+    result_rank = min(rank[base], rank[ceiling])
+    return {4: "confirmed", 3: "high", 2: "moderate", 1: "low"}[result_rank]
+
+
+def _score_to_severity(score: int) -> str:
+    """Map combined magnitude score to severity level.
+
+    Rules:
+      1 → mild
+      2 → moderate   (mild + mild)
+      3 → significant (mild + moderate)
+      4-5 → severe   (moderate + moderate, anything + significant)
+      6+ → critical  (significant + significant, or 3+ drugs stacking)
+    """
+    if score <= 1:
+        return "mild"
+    elif score == 2:
+        return "moderate"
+    elif score == 3:
+        return "significant"
+    elif score <= 5:
+        return "severe"
+    else:
+        return "critical"
+
+
+def _explain_compounding_depletion(bacteria: str, drugs: list, severity: str) -> str:
+    """Generate natural-language explanation for compounding depletion."""
+    name = bacteria.title()
+    if len(drugs) == 2:
+        return (
+            f"Both {drugs[0]} and {drugs[1]} reduce {name} levels in the gut. "
+            f"Taking them together may cause {severity} depletion of this beneficial species, "
+            f"weakening its protective effects on gut health."
+        )
+    return (
+        f"{', '.join(drugs[:-1])}, and {drugs[-1]} all deplete {name}. "
+        f"This {severity} combined impact could substantially reduce "
+        f"your gut's supply of this protective bacterium."
+    )
+
+
+def _explain_compounding_overgrowth(bacteria: str, drugs: list, severity: str) -> str:
+    """Generate natural-language explanation for compounding overgrowth."""
+    name = bacteria.title()
+    if len(drugs) == 2:
+        return (
+            f"{drugs[0]} and {drugs[1]} both encourage {name} growth. "
+            f"Together, this creates a {severity} risk of overgrowth, "
+            f"which may lead to digestive issues or infections."
+        )
+    return (
+        f"{', '.join(drugs[:-1])}, and {drugs[-1]} all promote {name} growth. "
+        f"The {severity} combined effect significantly raises overgrowth risk."
+    )
+
+
+def _explain_benefit_undermined(
+    bacteria: str, helpers: list, underminers: list, net_effect: str
+) -> str:
+    """Generate natural-language explanation for benefit undermined."""
+    name = bacteria.title()
+    helper_str = " and ".join(helpers) if len(helpers) <= 2 else f"{', '.join(helpers[:-1])}, and {helpers[-1]}"
+    underminer_str = " and ".join(underminers) if len(underminers) <= 2 else f"{', '.join(underminers[:-1])}, and {underminers[-1]}"
+
+    if net_effect == "net_increased":
+        outcome = f"The {name} benefit from {helper_str} still outweighs the reduction, but is diminished."
+    elif net_effect == "neutral":
+        outcome = f"The competing effects roughly cancel out, potentially neutralizing {helper_str}'s {name} benefit entirely."
+    else:
+        outcome = f"The reduction outweighs the benefit, meaning {helper_str}'s positive {name} effect may be largely lost."
+
+    return (
+        f"{underminer_str} may reduce the {name} increase from {helper_str}, "
+        f"potentially undermining its gut health benefits. {outcome}"
+    )
+
+
+def _build_diversity_description(details, combined_score, severity):
+    """Build a human-readable description of combined diversity impact."""
+    neg = [d for d in details if d["score"] < 0]
+    pos = [d for d in details if d["score"] > 0]
+    if combined_score <= -4:
+        return (
+            f"Multiple medications ({', '.join(d['drug'] for d in neg)}) are reducing "
+            f"gut microbiome diversity. Combined impact: {severity}. "
+            f"Consider broad-spectrum probiotics and dietary fiber to counteract."
+        )
+    if combined_score <= -2:
+        return (
+            f"{', '.join(d['drug'] for d in neg)} {'is' if len(neg) == 1 else 'are'} "
+            f"reducing diversity ({severity} impact). "
+            f"Prebiotic and probiotic support recommended."
+        )
+    if combined_score < 0:
+        return f"Mild diversity reduction from {', '.join(d['drug'] for d in neg)}."
+    if combined_score == 0:
+        if not pos and not neg:
+            return "No significant diversity impact expected."
+        return "Positive and negative diversity effects roughly cancel out."
+    return (
+        f"{', '.join(d['drug'] for d in pos)} {'is' if len(pos) == 1 else 'are'} "
+        f"actively supporting microbiome diversity — a beneficial effect."
+    )
+
+
+def predict_microbiome(drugs: List[str]) -> Dict[str, Any]:
+    """Analyze combined microbiome effects across all drugs.
+
+    Takes a full drug list and returns:
+    - Per-bacterium net effect with severity scored by combined magnitudes
+    - Compounding depletions (multiple drugs hitting same beneficial bacteria)
+    - Compounding overgrowth (multiple drugs boosting same harmful bacteria)
+    - Beneficial cancellations (one drug's benefit undermined by another)
+    - Overall microbiome health score
+    """
+    drug_objects = []
+    for name in drugs:
+        drug = find_drug(name)
+        if drug:
+            drug_objects.append(drug)
+
+    if not drug_objects:
+        return {
+            "drugs_analyzed": [],
+            "bacteria": [],
+            "compounding_depletions": [],
+            "compounding_overgrowth": [],
+            "beneficial_cancellations": [],
+            "overall_score": 0,
+            "overall_severity": "neutral",
+            "summary": "No recognized drugs provided.",
+        }
+
+    # --- Build per-bacterium map across ALL drugs ---
+    drug_by_name = {d["drug_name"]: d for d in drug_objects}
+    bacteria_map: Dict[str, Dict] = {}
+    for drug in drug_objects:
+        effects = drug.get("microbiome_effects", {})
+        for entry in effects.get("decreases", []):
+            bact = entry["bacteria"].lower()
+            if bact not in bacteria_map:
+                bacteria_map[bact] = {"decreased_by": [], "increased_by": []}
+            bacteria_map[bact]["decreased_by"].append({
+                "drug": drug["drug_name"],
+                "magnitude": entry["magnitude"],
+                "score": _MAGNITUDE_SCORE.get(entry["magnitude"], 1),
+                "mechanism": entry.get("mechanism", ""),
+            })
+        for entry in effects.get("increases", []):
+            bact = entry["bacteria"].lower()
+            if bact not in bacteria_map:
+                bacteria_map[bact] = {"decreased_by": [], "increased_by": []}
+            bacteria_map[bact]["increased_by"].append({
+                "drug": drug["drug_name"],
+                "magnitude": entry["magnitude"],
+                "score": _MAGNITUDE_SCORE.get(entry["magnitude"], 1),
+                "mechanism": entry.get("mechanism", ""),
+            })
+
+    # --- Analyze each bacterium ---
+    bacteria_results = []
+    compounding_depletions = []
+    compounding_overgrowth = []
+    beneficial_cancellations = []
+    synergistic_benefits = []
+
+    for bact, data in bacteria_map.items():
+        total_dec = sum(d["score"] for d in data["decreased_by"])
+        total_inc = sum(d["score"] for d in data["increased_by"])
+        net_score = total_dec - total_inc  # positive = net decrease
+        is_beneficial = bact in _BENEFICIAL_TAXA
+        is_harmful = bact in _HARMFUL_TAXA
+
+        if net_score > 0:
+            direction = "net_decreased"
+        elif net_score < 0:
+            direction = "net_increased"
+        else:
+            direction = "neutral"
+
+        result = {
+            "bacteria": bact,
+            "display_name": bact.title(),
+            "is_beneficial": is_beneficial,
+            "is_harmful": is_harmful,
+            "direction": direction,
+            "net_score": net_score,
+            "combined_severity": _score_to_severity(abs(net_score)),
+            "drugs_decreasing": [d["drug"] for d in data["decreased_by"]],
+            "drugs_increasing": [d["drug"] for d in data["increased_by"]],
+            "decrease_total": total_dec,
+            "increase_total": total_inc,
+        }
+        bacteria_results.append(result)
+
+        # Compounding depletion: 2+ drugs decrease a beneficial bacterium
+        if is_beneficial and len(data["decreased_by"]) >= 2:
+            drug_list = [d["drug"] for d in data["decreased_by"]]
+            sev = _score_to_severity(total_dec)
+            compounding_depletions.append({
+                "interaction_type": "compounding_harm",
+                "affected_bacteria": bact,
+                "display_name": bact.title(),
+                "confidence": _compute_confidence(
+                    [drug_by_name[d] for d in drug_list if d in drug_by_name],
+                    len(drug_list)  # multiple drugs confirming same effect
+                ),
+                "combined_severity": sev,
+                "severity": sev,
+                "combined_score": total_dec,
+                "drugs": drug_list,
+                "drug_details": data["decreased_by"],
+                "explanation": _explain_compounding_depletion(bact, drug_list, sev),
+                "description": (
+                    f"{', '.join(drug_list)} all reduce "
+                    f"beneficial {bact.title()}. Combined severity: {sev}."
+                ),
+                "recommendation": (
+                    f"Consider targeted probiotic with {bact.title()} strains. "
+                    f"Space medications apart to reduce compounding impact."
+                ),
+            })
+
+        # Compounding overgrowth: 2+ drugs increase a harmful bacterium
+        if is_harmful and len(data["increased_by"]) >= 2:
+            drug_list = [d["drug"] for d in data["increased_by"]]
+            sev = _score_to_severity(total_inc)
+            compounding_overgrowth.append({
+                "interaction_type": "compounding_harm",
+                "affected_bacteria": bact,
+                "display_name": bact.title(),
+                "confidence": _compute_confidence(
+                    [drug_by_name[d] for d in drug_list if d in drug_by_name],
+                    len(drug_list)
+                ),
+                "combined_severity": sev,
+                "severity": sev,
+                "combined_score": total_inc,
+                "drugs": drug_list,
+                "drug_details": data["increased_by"],
+                "explanation": _explain_compounding_overgrowth(bact, drug_list, sev),
+                "description": (
+                    f"{', '.join(drug_list)} all promote "
+                    f"harmful {bact.title()} growth. Combined severity: {sev}."
+                ),
+                "recommendation": (
+                    f"Monitor for {bact.title()} overgrowth symptoms. "
+                    f"Competitive probiotic therapy may help."
+                ),
+            })
+
+        # Beneficial cancellation: a drug increases a beneficial bacterium
+        # but another drug decreases it, undermining the benefit
+        if is_beneficial and data["increased_by"] and data["decreased_by"]:
+            helpers = [d["drug"] for d in data["increased_by"]]
+            underminers = [d["drug"] for d in data["decreased_by"]]
+            sev = _score_to_severity(total_dec)
+            beneficial_cancellations.append({
+                "interaction_type": "benefit_undermined",
+                "affected_bacteria": bact,
+                "display_name": bact.title(),
+                "confidence": _compute_confidence(
+                    [drug_by_name[d] for d in (helpers + underminers) if d in drug_by_name],
+                    len(helpers) + len(underminers)
+                ),
+                "combined_severity": sev,
+                "severity": sev,
+                "net_effect": direction,
+                "net_score": net_score,
+                "drugs_helping": helpers,
+                "drugs_undermining": underminers,
+                "help_score": total_inc,
+                "undermine_score": total_dec,
+                "explanation": _explain_benefit_undermined(
+                    bact, helpers, underminers, direction
+                ),
+                "description": (
+                    f"{', '.join(helpers)} {'increases' if len(helpers) == 1 else 'increase'} "
+                    f"beneficial {bact.title()}, but {', '.join(underminers)} "
+                    f"{'decreases' if len(underminers) == 1 else 'decrease'} it. "
+                    f"{'The benefit is being undermined.' if net_score > 0 else 'The benefit partially survives.' if net_score == 0 else 'The benefit still outweighs the harm.'}"
+                ),
+                "recommendation": (
+                    f"Consider spacing {', '.join(underminers)} away from {', '.join(helpers)} to preserve "
+                    f"{bact.title()} benefits. Timing optimization may help both drugs work."
+                ),
+            })
+
+        # Synergistic benefit: 2+ drugs increase the same beneficial bacterium
+        if is_beneficial and len(data["increased_by"]) >= 2 and not data["decreased_by"]:
+            drug_list = [d["drug"] for d in data["increased_by"]]
+            sev = _score_to_severity(total_inc)
+            drug_str = " and ".join(drug_list) if len(drug_list) <= 2 else f"{', '.join(drug_list[:-1])}, and {drug_list[-1]}"
+            synergistic_benefits.append({
+                "interaction_type": "synergistic_benefit",
+                "affected_bacteria": bact,
+                "confidence": _compute_confidence(
+                    [drug_by_name[d] for d in drug_list if d in drug_by_name],
+                    len(drug_list)
+                ),
+                "display_name": bact.title(),
+                "combined_severity": sev,
+                "combined_score": total_inc,
+                "drugs": drug_list,
+                "drug_details": data["increased_by"],
+                "explanation": (
+                    f"{drug_str} both promote {bact.title()} growth, creating a synergistic "
+                    f"boost to this beneficial species. This {sev} combined effect strengthens "
+                    f"gut health beyond what either medication achieves alone."
+                ),
+            })
+
+    # Sort results: worst concerns first
+    severity_order = {"critical": 0, "severe": 1, "significant": 2, "moderate": 3, "mild": 4}
+    bacteria_results.sort(key=lambda b: severity_order.get(b["combined_severity"], 5))
+    compounding_depletions.sort(key=lambda c: -c["combined_score"])
+    compounding_overgrowth.sort(key=lambda c: -c["combined_score"])
+    beneficial_cancellations.sort(key=lambda c: -c["undermine_score"])
+    synergistic_benefits.sort(key=lambda c: -c["combined_score"])
+
+    # --- Diversity impact ---
+    diversity_details = []
+    for drug in drug_objects:
+        raw = drug.get("microbiome_effects", {}).get("overall_diversity", "")
+        score = _parse_diversity_score(raw) if raw else 0
+        diversity_details.append({
+            "drug": drug["drug_name"],
+            "raw_value": raw,
+            "score": score,
+        })
+    combined_diversity_score = sum(d["score"] for d in diversity_details)
+    diversity_severity = _diversity_severity(combined_diversity_score)
+
+    diversity_impact = {
+        "per_drug": diversity_details,
+        "combined_score": combined_diversity_score,
+        "severity": diversity_severity,
+        "description": _build_diversity_description(diversity_details, combined_diversity_score, diversity_severity),
+    }
+
+    # Overall microbiome health score
+    concern_total = (
+        sum(c["combined_score"] for c in compounding_depletions)
+        + sum(c["combined_score"] for c in compounding_overgrowth)
+        + sum(c["undermine_score"] for c in beneficial_cancellations)
+    )
+    # Factor in diversity: negative diversity adds to concerns
+    if combined_diversity_score < 0:
+        concern_total += abs(combined_diversity_score)
+    benefit_total = sum(
+        b["increase_total"] for b in bacteria_results
+        if b["is_beneficial"] and b["direction"] == "net_increased"
+    ) + sum(
+        b["decrease_total"] for b in bacteria_results
+        if b["is_harmful"] and b["direction"] == "net_decreased"
+    )
+    # Positive diversity counts as benefit
+    if combined_diversity_score > 0:
+        benefit_total += combined_diversity_score
+    overall_score = concern_total - benefit_total
+
+    if overall_score <= 0:
+        overall_severity = "beneficial" if benefit_total > 0 else "neutral"
+    else:
+        overall_severity = _score_to_severity(overall_score)
+
+    # Build summary
+    drug_names = [d["drug_name"] for d in drug_objects]
+    parts = []
+    if compounding_depletions:
+        worst = compounding_depletions[0]
+        parts.append(
+            f"{worst['display_name']} is hit hardest — {len(worst['drugs'])} drugs "
+            f"combine for {worst['severity']} depletion"
+        )
+    if beneficial_cancellations:
+        worst = beneficial_cancellations[0]
+        parts.append(
+            f"{', '.join(worst['drugs_undermining'])} may undermine "
+            f"{', '.join(worst['drugs_helping'])}'s {worst['display_name']} benefit"
+        )
+    if compounding_overgrowth:
+        worst = compounding_overgrowth[0]
+        parts.append(
+            f"{worst['display_name']} overgrowth risk from {len(worst['drugs'])} drugs"
+        )
+    if diversity_severity in ("severe", "critical"):
+        parts.append(
+            f"Combined diversity loss is {diversity_severity}"
+        )
+    elif diversity_severity == "significant":
+        parts.append("Notable diversity reduction across medications")
+    if synergistic_benefits and not compounding_depletions and not beneficial_cancellations:
+        bact_names = [s["display_name"] for s in synergistic_benefits]
+        drug_set = sorted({d for s in synergistic_benefits for d in s["drugs"]})
+        parts.append(
+            f"{' and '.join(drug_set)} work together to boost {', '.join(bact_names)}"
+        )
+    if diversity_severity == "beneficial" and not parts:
+        parts.append("Your medications synergistically support microbiome diversity")
+    if not parts:
+        parts.append("Your medications have minimal combined microbiome interactions")
+
+    return {
+        "drugs_analyzed": drug_names,
+        "bacteria": bacteria_results,
+        "compounding_depletions": compounding_depletions,
+        "compounding_overgrowth": compounding_overgrowth,
+        "beneficial_cancellations": beneficial_cancellations,
+        "synergistic_benefits": synergistic_benefits,
+        "diversity_impact": diversity_impact,
+        "overall_score": overall_score,
+        "overall_severity": overall_severity,
+        "summary": ". ".join(parts) + ".",
+    }
